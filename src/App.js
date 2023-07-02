@@ -51,9 +51,13 @@ class App extends Component {
       <div className="wrapper">
         <Header user={this.state.loggedInUser} onReturnChangeHandler={this.returnChangeHandler}/>
         <Main user={this.state.loggedInUser} searchKeyword = {this.state.searchKeyword} />
+      </div>
 
-{/* 
-<div className="chatbox-list" style={{ right: "270px", display: "none" }}>
+    );
+  }
+}
+
+{/* <div className="chatbox-list" style={{ right: "270px", display: "none" }}>
           <div className="chatbox">
             <div className="chat-mg">
               <a href="/#" title="">
@@ -160,12 +164,12 @@ class App extends Component {
                   </a>
                   <a href="/#" title="" className="close-chat">
                     <i className="la la-close"></i>
-                  </a>
-                </div>
+                    </a>
+                    </div>
               </div>
               <div className="chat-hist mCustomScrollbar _mCS_2" data-mcs-theme="dark">
-                <div id="mCSB_2" className="mCustomScrollBox mCS-dark mCSB_vertical mCSB_inside" style={{ maxHeight: "none" }} tabIndex="0">
-                  <div id="mCSB_2_container" className="mCSB_container" style={{ position: "relative", top: 0, left: 0 }} dir="ltr">
+              <div id="mCSB_2" className="mCustomScrollBox mCS-dark mCSB_vertical mCSB_inside" style={{ maxHeight: "none" }} tabIndex="0">
+              <div id="mCSB_2_container" className="mCSB_container" style={{ position: "relative", top: 0, left: 0 }} dir="ltr">
                     <div className="chat-msg">
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.</p>
                       <span>Sat, Aug 23, 1:10 PM</span>
@@ -281,12 +285,9 @@ class App extends Component {
               </div>
             </div>
           </div>
-        </div> 
-*/}
+  </div>  */}
+
        
-      </div>
-    );
-  }
-}
+      
 
 export default App;

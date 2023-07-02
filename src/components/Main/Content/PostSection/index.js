@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { postAPI } from "../../../../apis";
 import Post from "./Post";
+import CommentPopup from "./CommentPopup";
+
  
 class PostSection extends Component {
   constructor() {
@@ -10,7 +12,6 @@ class PostSection extends Component {
     };
   }
 
-  
   componentDidMount() {
     fetch(postAPI, {
       headers: {
@@ -33,7 +34,6 @@ class PostSection extends Component {
       var filteredPosts = this.state.posts.filter((post) =>
         post.title.toLowerCase().includes(this.props.searchKeyword.toLowerCase())
       );
-    console.log(filteredPosts, this.props.searchKeyword.length)
     if(this.props.searchKeyword.length > 1){
       return (
         <div className="posts-section">
@@ -44,13 +44,15 @@ class PostSection extends Component {
       );
    
     }
-
     return (
+      <>
       <div className="posts-section">
         {this.state.posts.map((post, i) => (
-          <Post key={i} post={post} />
-        ))}
+          <Post key={i} post={post} user={this.props.user}/>
+          ))}
       </div>
+      
+      </>
     );
     // return(
     //   <div className="posts-section">

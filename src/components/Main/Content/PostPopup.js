@@ -89,7 +89,7 @@ class PostPopup extends Component{
                     </div>
                   </div> */}
 
-
+   
                   <div className="col-lg-6">
                     <div className="inp-field">
                       <select id="job-nature">

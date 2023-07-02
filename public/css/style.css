@@ -6899,3 +6899,14 @@ ul#myTab {
   /* align-items: center; */
   /* margin: 50px; */
 }
+
+.comment-input{
+  display: none;
+}
+.comment-button{
+  display: none;
+}
+
+.comment-active{
+  display: inline;
+}

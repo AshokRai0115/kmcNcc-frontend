@@ -1,19 +1,125 @@
 import { Component } from "react";
-
+import { postAPI } from "../../../../apis";
+import Comment from "./Comment";
 class Post extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      comments: props.post.comments,
+      likes: props.post.liked_by
+    }
+    this.likeHandler = this.likeHandler.bind(this)
+    // this.changeStatus = this.changeStatus.bind(this)
+  }
   calPostTimeAgo(post_date) {
-    // const postTime = new Date();
-    // console.log(postTime)
-    // const date = post_date.split("T")[0];
-    // const time = post_date.split("T")[1];
-    // postTime.setDate(date);
-    // postTime.setTime(time.split(".")[0]);
-    // console.log(postTime, date, time);
     return post_date;
   }
-  render() {
-    const { post_date, post_by_username, post_by_fullname, location, title, job_type, pay_rate_per_hr_dollar, description, skills, liked_by, viewed_by, comment } = this.props.post;
+  likeHandler(event) {
+    event.preventDefault();
+    const currentLikes = [...this.state.likes];
+    const newLikes = [...currentLikes];
+    if (newLikes.indexOf(this.props.user.username) > -1) {
+      newLikes.splice(newLikes.indexOf(this.props.user.username, 1));
+    } else {
+      newLikes.push(this.props.user.username);
+    }
+    this.setState({ likes: newLikes })
+    const that = this
+    fetch(postAPI + "/update_likes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+      },
+      body: JSON.stringify({
+        post_id: this.props.post.id,
+        user_id: this.props.user?.id
+      }),
+    })
+      .then((resp) => {
+        if (resp.status !== 200) {
+          that.setState({ likes: currentLikes })
+        }
+        return resp.json()
+      })
+      .then((data) => {
+        if (data) {
+          that.setState({ likes: data })
+          // document.querySelector("#err").innerHTML = "";
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        that.setState({ likes: currentLikes })
+        // document.querySelector("#err").innerHTML = "Login Failed";
+      });
+  }
 
+  // commentHandler(event){
+  //   event.preventDefault()
+  //   const commentInput = document.querySelector(".comment-input");
+  //   const commentBtn = document.querySelector(".comment-button")
+  //   if(commentInput.classList.contains("comment-active")){
+  //     commentInput.classList.remove("comment-active")
+  //     commentBtn.classList.remove("comment-active")
+  //   }else{
+  //   commentInput.classList.add("comment-active")
+  //   commentBtn.classList.add("comment-active")
+  //   }
+
+
+
+
+
+  // changeStatus(event){
+  //   document.querySelector(".comment-input").classList.remove("comment-active")
+  //   document.querySelector(".comment-button").classList.remove("comment-active")
+
+  //   var comment = document.querySelector(".comment-input").value
+  //   const currentComments = [...this.state.comments];
+  //   const newComments = [...currentComments];
+  //   if(comment.length > 0){
+  //     newComments.push(comment)
+  //   }
+  //   this.setState({comments: newComments})
+  //   const that = this
+  //   fetch(postAPI +  "/update_comment", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "accept": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       post_id: this.props.post.id,
+  //       user_id: this.props.user?.id,
+  //       comments: that.state.comments
+  //     }),
+  //   })
+  //     .then((resp) => {
+  //       if(resp.status !== 200){
+  //       that.setState({comments: currentComments})
+  //       }
+  //       return resp.json()
+  //     })
+  //     .then((data) => {
+  //       if (data) {
+  //         that.setState({comments: data})
+  //         // document.querySelector("#err").innerHTML = "";
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       that.setState({comments: currentComments})
+  //       // document.querySelector("#err").innerHTML = "Login Failed";
+  //     });
+
+
+
+  // }
+  render() {
+    const { post_date, post_by_username, post_by_fullname, location, title, job_type, pay_rate_per_hr_dollar, description, skills, viewed_by, comments } = this.props.post;
+
+    const liked_by = this.state.likes;
     return (
       <div className="postyy post-bar">
         <div className="post_topbar">
@@ -47,7 +153,7 @@ class Post extends Component {
               <li>
                 <a href="/#" title="">
                   Close
-                </a> 
+                </a>
               </li>
               <li>
                 <a href="/#" title="">
@@ -116,21 +222,31 @@ class Post extends Component {
         <div className="job-status-bar">
           <ul className="like-com">
             <li>
-              <a href="/#">
-                <i className="fas fa-heart"></i> Like
+              <a href="/#" onClick={this.likeHandler}>
+                <i className="fas fa-heart"></i> {liked_by.indexOf(this.props.user?.username) > -1 ? <b>Liked</b> : "Like"}
               </a>
               <img src="./images/liked-img.png" alt="" />
-              <span>{liked_by.length}</span>
+              <span className="like-count">{liked_by.length}</span>
+              {console.log(liked_by.length)}
             </li>
             <li>
-              <a href="/#" className="com">
-                <i className="fas fa-comment-alt"></i> Comment <>{Comment.length}</>
+              <a href="/#" className="com comment-box" onClick={this.commentHandler}>
+                <i className="fas fa-comment-alt"></i> Comment <>{comments.length}</>
+
               </a>
+            </li>
+            <input type="text" name="comment-box" className="comment-input" placeholder="comment"></input>
+            <button className="comment-button" onClick={this.changeStatus}>Comment</button>
+            <li>
+
             </li>
           </ul>
           <a href="/#">
             <i className="fas fa-eye"></i>Views <>{viewed_by.length}</>
           </a>
+          <div>
+            <Comment user={this.props.user} comments={comments} postId={this.props.post.id} ></Comment>
+          </div>
         </div>
       </div>
     );

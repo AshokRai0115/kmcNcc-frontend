@@ -2,7 +2,7 @@ import { Component } from "react";
 import PostSection from "./PostSection";
 import PostTop from "./PostTop";
 import PostPopup from "./PostPopup";
-
+    
 class Content extends Component {
   render() { 
     return (
@@ -10,7 +10,7 @@ class Content extends Component {
         <div className="main-ws-sec">
           <PostPopup user={this.props.user} /> 
           <PostTop user={this.props.user} />
-          <PostSection searchKeyword = {this.props.searchKeyword}/>
+          <PostSection searchKeyword = {this.props.searchKeyword} user={this.props.user}/>
           
         </div>
       </div>

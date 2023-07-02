@@ -10,7 +10,7 @@ class PostTop extends Component {
     return false;
   }
 
-  render() {
+  render() { 
     return (
       <div className="post-topbar">
         <div className="user-picy">
